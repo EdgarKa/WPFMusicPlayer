@@ -1,0 +1,102 @@
+﻿<UserControl x:Class="WPFMusicPlayer.Views.MainPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:components="clr-namespace:WPFMusicPlayer.Components"
+             xmlns:local="clr-namespace:WPFMusicPlayer.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Background="White">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <!-- Logo and search button -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Text="WpfMusicPlayer" Margin="5"/>
+            <Button Grid.Column="1" Content="Browse" Width="80" Height="20" />
+        </Grid>
+        <!-- Listing and Details -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" Width="100" Height="20" Margin="5" Content="Home" />
+                <Button Grid.Row="1" Width="100" Height="20" Content="Music" />
+                <Button Grid.Row="2" Width="100" Height="20" Margin="5" Content="Playlist" />
+                <Button Grid.Row="3" Width="100" Height="20" Content="Queue" />
+                <Button Grid.Row="4" Content="Get File" Margin="5" Width="100" Height="20" Click="GetFileClick" />
+                <TextBox x:Name="FilePath" Visibility="Hidden" Margin="15 0" Text="{Binding FullPath, UpdateSourceTrigger=PropertyChanged}" MaxWidth="100" Height="20"  />
+                <!--<Button Grid.Row="4" Content="Get File" Click="GetFileClick" Width="100" Height="20" /> -->
+            </Grid>
+            <Grid Grid.Column="1">
+                <components:HomePage />
+                <!--<components:HomePage /> -->
+            </Grid>
+        </Grid>
+
+        <!-- Player itself -->
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text='{Binding CurrentLength, FallbackValue="0:00:01"}' HorizontalAlignment="Left" Margin="5 0" />
+                <!-- Thumb.DragCompleted="Slider_DragCompleted" -->
+                <Slider Name="SliderValue" Value="{Binding SeekTo, UpdateSourceTrigger=Default}" Grid.Column="1" Grid.Row="0" Margin="10 0" Minimum="0" Maximum="1"/>
+                <TextBlock Grid.Column="2" Text='{Binding SongLength, FallbackValue="0:00:00"}' HorizontalAlignment="Right" Margin="5 0" />
+            </Grid>
+
+            <StackPanel Grid.Row="1" HorizontalAlignment="Center" Width="600" Orientation="Horizontal">
+                <Image Width="20" Height="20" Cursor="Hand" Source="\Resources\UI_play.png" Margin="5">
+                    <Image.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding PlayCommand, Mode=OneTime, ConverterParameter=Play}" CommandParameter="play" />
+                    </Image.InputBindings>
+                </Image>
+                <Image Width="20" Height="20" Source="\Resources\UI_pause.png" Margin="5">
+                    <Image.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding PlayCommand, Mode=OneTime, ConverterParameter=Pause}" CommandParameter="pause" />
+                    </Image.InputBindings>
+                </Image>
+                <Image Width="20" Height="20" Source="\Resources\UI_stop.png" Margin="5">
+                    <Image.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding PlayCommand, Mode=OneTime, ConverterParameter=Stop}" CommandParameter="stop" />
+                    </Image.InputBindings>
+                </Image>
+                <!--<Image Width="20" Height="20" Source="\Resources\UI_prev.png" MouseDown="OnMouseDownStopMedia" Margin="5" /> -->
+                <Image Width="20" Height="20" Source="\Resources\UI_prev.png" Margin="20 5" >
+                    <Image.RenderTransform>
+                        <ScaleTransform ScaleX="-1"/>
+                    </Image.RenderTransform>
+                </Image>
+                <!-- Volume slider. This slider allows a Volume range between 0 and 1. -->
+                <TextBlock Foreground="Black" VerticalAlignment="Center" Margin="5"  >Volume</TextBlock>
+                <Slider Name="VolumeSlider" VerticalAlignment="Center" Minimum="0" Maximum="100" Value="{Binding Volume}" Width="100"/>
+                <TextBlock Text="{Binding VolumeText, FallbackValue=0}" VerticalAlignment="Center" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
